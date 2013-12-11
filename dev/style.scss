@@ -1,0 +1,792 @@
+/* -------------------------------------------------------------------------------------- */
+/* Variables ================================================================================ */
+  $nightblue : #313455;
+  $blue : #79BECE;
+  $white : #FDFDFE;
+  $gold : wheat;
+  $shadow : rgba(0,0,0,.05);
+  $black : #403E47;
+
+  $animation-duration : 5s;
+  $sway : 2deg;
+  $transition : .35s;
+
+
+/* -------------------------------------------------------------------------------------- */
+/* Reset ================================================================================ */
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    vertical-align: 0;
+    border: 0;
+  }
+
+  header, footer, section, aside, figure, figcaption, nav { display: block; }
+
+
+/* -------------------------------------------------------------------------------------- */
+/* Base styles ========================================================================== */
+  html, body { height: 100%; }
+  html {
+    @media (max-width: 56em){ font-size: 80%; }
+    @media (max-height: 32em){ font-size: 80%; }
+  }
+
+  body {
+    font: 100%/1.7 "Gentium book basic";
+    position: relative;
+    background-color: #fcfcfc;
+    color: $black;
+  }
+
+  h1, h2 { font-weight: 400; }
+
+  h1 {
+    font-size: 2.25rem;
+    font-style: italic;
+  }
+  h2 {
+    font-size: 1.25rem;
+  }
+
+  a {
+    text-decoration: none;
+    cursor: pointer;
+
+    &:hover { text-decoration: underline; }
+  }
+
+
+/* -------------------------------------------------------------------------------------- */
+/* Main portion ========================================================================= */
+  .snow-container {
+    background: $blue;
+    overflow-y: hidden;
+  }
+    .night .snow-container { background-color: $nightblue; }
+
+  .snowfall {
+    position: absolute;
+    z-index: 1000;
+    pointer-events: none;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+
+  header {
+    padding: 1rem 2rem;
+    text-shadow: 0 0 4rem whitesmoke;
+    text-align: center;
+
+    iframe { margin-left: .5rem; vertical-align: top; }
+
+    h1 a { position: relative; }
+    h2 { display: inline; }
+    a { color: $black; }
+
+    @media (min-width: 56em){
+      display: flex;
+      align-items: center;
+      padding: .5rem 4.5rem;
+      text-align: left;
+
+      h1, h2 { display: inline-block; }
+      h1 { padding: 1rem 1.75rem 1rem .5rem; }
+      h2 {
+        display: inline-block;
+        flex: 1;
+        padding-top: .75rem;
+        font-size: 1.1em;
+        line-height: 1.2;
+      }
+      iframe { padding-left: 1rem; }
+    }
+  }
+    .night header {
+      color: $gold;
+      text-shadow: 0 0 4rem $gold;
+
+      a { color: $gold; }
+    }
+
+  @keyframes header {
+    from { opacity: 0; }
+  }
+
+
+
+/* -------------------------------------------------------------------------------------- */
+/* Snowman container ==================================================================== */
+  .snowman-container {
+    position: relative;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    user-select: none;
+
+    @media (min-width: 56em){
+      &::-webkit-scrollbar {
+        height: .75rem;
+        background: $white;
+      }
+      &::-webkit-scrollbar-thumb {
+          background: rgba(0,0,0,.2);
+          border-bottom: .25rem solid $white;
+          border-left: .75rem solid $white;
+          border-right: .75rem solid $white;
+      }
+    }
+  }
+
+  .loading {
+    font-style: italic;
+    font-size: 2rem;
+    position: absolute;
+    top: 2rem; left: 0; right: 0;
+    text-align: center;
+    transition: .8s;
+
+    span {
+      display: inline-block;
+      animation: loading-dot .75s infinite;
+
+      &:nth-child(2){ animation-delay: .25s; }
+      &:nth-child(3){ animation-delay: .5s; }
+    }
+  }
+  .night .loading { color: $gold; }
+  .done .loading { animation: done-loading 1s both; }
+
+  @keyframes done-loading { to { transform: translate3d(0,-1rem,0); opacity: 0; } }
+  @keyframes loading-dot { from { opacity: 0; } }
+
+  .slider {
+    position: relative;
+    display: inline-block;
+    white-space: nowrap;
+    box-sizing: content-box;
+    position: relative;
+    min-width: 70%;
+    text-align: left;
+    padding: 4rem 15% 1.5rem;
+    height: 25rem;
+    transform: perspective(500);
+    transition: opacity 1s 1s;
+
+    @media (min-width: 56em) {
+      padding: 4rem 2rem 2rem;
+      min-width: calc(100% - 4rem);
+    }
+  }
+  .disable-hover { pointer-events: none; }
+
+  .snow {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -5px;
+    height: 15rem;
+    background-image: url(/img/mountains.svg);
+    background-size: 100rem 15rem;
+    background-repeat: repeat-x;
+    transition: transform 1s;
+  }
+  .snow-back {
+    bottom: 2.5rem;
+    background-position: 60rem 0;
+    background-size: 80rem 12rem;
+    opacity: .8;
+  }
+
+/* -------------------------------------------------------------------------------------- */
+/* Snowman ============================================================================== */
+  .snowman {
+    position: relative;
+    z-index: 100;
+    display: inline-block;
+    width: 15rem;
+    text-align: center;
+    animation: snowman-enter .5s both;
+    transform-origin: center bottom;
+
+    @media (min-width: 56em){
+      width: 17rem;
+    }
+
+    &:last-child { margin-right: 0; }
+  }
+  .prepare-reload .snowman { animation: snowman-leave .5s both; }
+
+    $origin : translate3d(0,25rem,0) scale3d(.5,.5,.5);
+    @keyframes snowman-enter { from { transform: $origin; } }
+    @keyframes snowman-leave { to { transform: $origin; } }
+
+  .snowball, .santa .head:before {
+    position: relative;
+    display: block;
+    margin: 0 auto;
+    background: $white;
+    border-radius: 5rem;
+    box-shadow: inset .75rem -.75rem $shadow;
+  }
+
+  .snowball {
+    animation: wiggle $animation-duration ease-in-out infinite;
+    transform: rotate3d(0,0,1,-$sway);
+    width: 10rem;
+    height: 10rem;
+  }
+
+
+
+/* -------------------------------------------------------------------------------------- */
+/* Headwear ============================================================================= */
+  .hat { display: inline-block; }
+
+  .tophat {
+    position: absolute;
+    width: 5rem;
+    height: 4rem;
+    left: 1rem;
+    top: -2.75rem;
+    z-index: 400;
+    box-shadow:
+      inset 0 -1.75rem darken($black, 10%),
+      inset 1rem 0 $shadow;
+    border-radius: .25rem;
+
+    .brim {
+      display: block;
+      position: absolute;
+      content: "";
+      left: -.5rem;
+      right: -.5rem;
+      bottom: 0;
+      height: 1rem;
+      box-shadow: inset 1rem 0 $shadow;
+      border-radius: .25rem;
+    }
+  }
+
+  .cap {
+    border-radius: 5rem 5rem .25rem .25rem;
+    box-shadow:
+      inset 0 -1.75rem darken($black, 10%),
+      inset 2rem 0 $shadow;
+
+    .pompom {
+      position: absolute;
+      top: -1rem;
+      font-size: 2rem;
+      line-height: 2rem;
+      color: $white;
+      width: 5rem;
+      text-align: center;
+    }
+  }
+  .snowman:hover .pompom { animation: pompom .8s infinite; }
+    @keyframes pompom { 50% { transform: scale3d(1.2,1.2,1.2); } }
+
+  .santa-front, .santa-back {
+    position: absolute;
+    width: 9rem;
+    height: 9rem;
+    top: -1.75rem; left: -2.25rem; right: 0; bottom: 0;
+  }
+  .santa-front { z-index: 500; }
+  .santa-back {
+    z-index: -100;
+    animation: counter-wiggle $animation-duration ease-in-out infinite;
+    transform-origin: 1.5rem 2rem;
+  }
+
+  .earmuffs {
+    position: absolute;
+    top: -.5rem;
+    left: -.5rem;
+    right: -.5rem;
+    height: 4rem;
+    border: .25rem solid gray;
+    border-bottom: 0;
+    border-radius: 3.5rem 3.5rem 0 0;
+
+    .muff {
+      position: absolute;
+      top: 3rem;
+      width: 1rem;
+      height: 2rem;
+      border-radius: 1rem;
+
+      &:first-child { left: -.5rem; }
+      &:last-child { right: -.5rem; }
+    }
+  }
+    .santa.withearmuffs .muff { box-shadow: inset 1.5rem 0 rgba(0,0,0,.2); }
+
+/* -------------------------------------------------------------------------------------- */
+/* Head ================================================================================= */
+  .head {
+    z-index: 200;
+    width: 7rem;
+    height: 7rem;
+    transform-origin: center 18rem;
+    margin-bottom: -2rem;
+  }
+
+  .santa .head {
+    background: transparent;
+
+    &:before {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      content: "";
+    }
+  }
+
+  @mixin button {
+    display: inline-block;
+    position: absolute;
+    width: .75rem;
+    height: .75rem;
+    background: $black;
+    color: $black;
+    border-radius: 1rem;
+  }
+  .eye {
+    @include button;
+    top: 2rem;
+    animation: blink 5s ease-in-out infinite;
+  }
+  .eye.left { left: 2.5rem; }
+  .eye.right { right: 2.5rem; }
+
+  @keyframes blink {
+    90%{ transform: rotate3d(1,0,0,0); }
+    93% { transform: rotate3d(1,0,0,90deg);  }
+  }
+
+  .wink .eye.right { animation: none; }
+
+  .nose {
+    position: absolute;
+    width: 0; height: 0;
+    top: 3rem;
+    left: 50%;
+    border-left: 3rem solid orange;
+    border-top: .5rem solid transparent;
+    border-bottom: .5rem solid transparent;
+    transition: transform $transition .4s, border-left-width $transition .2s;
+    transform-origin: left center;
+    border-radius: .5rem;
+  }
+    .pinocchio .nose { border-left-width: 5rem; }
+
+    .snowman:hover .nose { transform: translateX(.25rem) rotate3d(0,1,0,-180deg); }
+
+  .mouth {
+    @include button;
+    top: 4.5rem;
+    left: 3.5rem;
+    width: .5rem;
+    height: .5rem;
+    box-shadow:
+      -.875rem -.25rem 0 -.03125rem,
+       .875rem -.25rem 0 -0.03125rem;
+  }
+    .happy:not(.shiver) .mouth,
+    .tooth:not(.shiver) .mouth,
+    .teeth:not(.shiver) .mouth {
+      width: 1rem;
+      height: .75rem;
+      border-radius: .125rem .125rem 1rem 1rem;
+      left: 3.25rem;
+      box-shadow: none;
+    }
+
+    .tooth:not(.shiver) .mouth:after,
+    .teeth:not(.shiver) .mouth:after  {
+        content: "";
+        display: block;
+        position: absolute;
+        left: 20%;
+        width: .25rem;
+        height: .375rem;
+        background: rgba($white,.8);
+        top: -.125rem;
+    }
+
+    .teeth:not(.shiver) .mouth:after { box-shadow: .3275rem 0 rgba($white,.8); }
+
+
+
+/* -------------------------------------------------------------------------------------- */
+/* Neckwear ============================================================================= */
+  .scarf, .tie {
+    display: inline-block;
+    position: absolute;
+  }
+
+  .scarf {
+    bottom: 1.5rem;
+    left: 0;
+    width: 7rem;
+    height: 1.5rem;
+    margin-bottom: -1.6125rem;
+    border-radius: .25rem;
+
+    .overhang {
+      position: absolute;
+      left: 5rem;
+      right: .5rem;
+      top: -.125rem;
+      height: 5rem;
+      transform-origin: center top;
+      border-radius: .125rem;
+      animation: counter-wiggle $animation-duration infinite;
+      box-shadow: -.25rem .25rem $shadow;
+      transform: rotate3d(0,0,1,$sway);
+    }
+  }
+
+  .tie {
+    top: 6.5rem;
+    left: 3rem;
+    animation: counter-wiggle-tie $animation-duration infinite;
+    transform-origin: center top;
+  }
+
+  .bowtie {
+    position: absolute;
+    width: 3rem;
+    height: 2rem;
+    top: 6rem;
+    left: 2.375rem;
+    transform-origin: center center;
+    animation: none;
+    z-index: 100;
+
+    svg {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      z-index: -1;
+
+      @media (max-width: 56em){
+        width: 3rem;
+        height: 2rem;
+      }
+    }
+
+    .knot {
+      display: inline-block;
+      margin: .375rem;
+      width: 1rem;
+      height: 1rem;
+
+      border-radius: 50%;
+      box-shadow: inset 0 2rem rgba(40,40,40,.1);
+    }
+  }
+
+  @keyframes wiggle { 50% { transform: rotate3d(0,0,1,$sway); } }
+  @keyframes counter-wiggle { 50% { transform: rotate3d(0,0,1,-$sway); } }
+  @keyframes counter-wiggle-tie { 50% { transform: rotate3d(0,0,1,-($sway*3)); } }
+
+
+/* -------------------------------------------------------------------------------------- */
+/* Torso ================================================================================ */
+  .torso {
+    z-index: 100;
+    width: 8rem;
+    height: 8rem;
+    transform-origin: center 10rem;
+    margin-bottom: -2.5rem;
+  }
+
+  .buttons {
+      @include button;
+      top: 2.5rem;
+      left: 4rem;
+      box-shadow:
+        0 1.25rem,
+        0 2.5rem;
+  }
+    .zero-buttons .buttons { display: none; }
+    .one-buttons .buttons { box-shadow: none }
+    .two-buttons .buttons { box-shadow: 0 1.25rem; }
+    .four-buttons .buttons {
+      width: .5rem;
+      height: .5rem;
+      box-shadow:
+        0 1rem,
+        0 2rem,
+        0 3rem;
+    }
+
+  .branches {
+    position: absolute;
+    top: -2.5rem;
+    width: 22rem;
+    left: -7rem;
+  }
+
+
+
+/* -------------------------------------------------------------------------------------- */
+/* Tweet info =========================================================================== */
+  figcaption { position: relative; }
+
+  .profile-link {
+    display: inline-block;
+    margin-top: .5rem;
+    color: $black;
+
+    &:before { content: "@"; }
+
+    &:hover {
+      color: black;
+
+      span { text-decoration: underline; }
+    }
+  }
+
+  .timestamp {
+    display: block;
+    font-size: smaller;
+    color: gray;
+    line-height: 1;
+
+    &:hover time {
+      text-decoration: underline;
+      color: dimgray;
+
+    }
+    &:before {
+      display: inline-block;
+      font-family: "icon";
+      content: "t";
+      width: 1em;
+      margin-right: .25em;
+      color: #ccc;
+    }
+  }
+
+
+
+/* -------------------------------------------------------------------------------------- */
+/* Bottom portion ======================================================================= */
+  $footerbg : darken($black, 10%);
+  footer {
+    position: relative;
+    z-index: 500;
+    padding: 2.5rem 1rem 1rem;
+    background: $footerbg;
+    text-align: left;
+    color: $gold;
+    background-image: linear-gradient(darken($footerbg, 10%), $footerbg);
+    background-size: 100% 2.25rem;
+    background-repeat: no-repeat;
+
+    @media (min-width: 56em) {
+      padding: 2.5rem 5rem;
+    }
+
+    h1 {
+      display: inline-block;
+      font-size: 3rem;
+
+      @media (min-width: 56em) {
+        padding-right: 3rem;
+      }
+    }
+    h2 {
+      font-size: 1rem;
+      flex: 1;
+    }
+  }
+
+  .instructions {
+    @media (min-width: 56em) {
+      display: flex;
+      align-items: center;
+    }
+  }
+
+  .parameters {
+    @media (min-width: 56em) {
+      column-count: 2;
+      column-gap: 3rem;
+      padding-top: .75rem;
+    }
+  }
+
+  .box {
+    display: inline-block;
+    padding-top: .75rem;
+  }
+
+  li {
+    font-family: "Source Sans Pro";
+    display: inline-block;
+    color: $gold;
+    list-style: none;
+    background: rgba(0,0,0,.25);
+    border-radius: .25em;
+    opacity: .8;
+    margin: 0 .375em .375em 0;
+    padding: .25em .5em;
+
+    @media (max-width: 56em) {
+      font-size: 1.2em;
+    }
+
+    a {
+      display: inline-block;
+      color: inherit;
+
+      &:after {
+        padding-left: .5em;
+        content: "\2192";
+      }
+    }
+  }
+
+  em {
+    font-size: .9rem;
+    padding: 0 .25em;
+    opacity: .6;
+  }
+
+  .examples {
+    display: block;
+
+    li {
+      display: block;
+      position: relative;
+      padding-right: 3.75rem;
+    }
+
+    a {
+      position: absolute;
+      right: 0;
+      bottom: .25rem;
+      display: inline-block;
+      font: 1em/2 "icon";
+      padding-right: .75rem;
+      content: "t";
+      color: rgba($gold, .2);
+      transition: $transition;
+
+      &:hover {
+        color: rgba($gold, .8);
+        transition: 0;
+        text-decoration: none;
+      }
+    }
+  }
+
+
+.merry-christmas {
+  display: block;
+  padding: 2.5rem 0 1rem;
+  opacity: .75;
+  transition: $transition*3;
+  text-align: center;
+  line-height: 1.8;
+
+  @media (min-width: 56em) {
+    font-size: smaller;
+  }
+
+  &:hover {
+    opacity: 1;
+    transition: $transition;
+  }
+
+  a {
+    color: $gold;
+    text-decoration: none;
+    border-bottom: thin solid rgba($gold, .2);
+
+    &:after { display: none; }
+    &:hover { border-bottom-color: rgba($gold, .5); }
+  }
+
+  iframe {
+    margin-left: .5rem;
+    vertical-align: middle;
+  }
+}
+
+
+
+/* -------------------------------------------------------------------------------------- */
+/* Behavior ============================================================================= */
+  .snowman {
+    .behavior {
+      transition: $transition;
+
+      * { pointer-events: none; }
+    }
+
+    &:hover .behavior {
+      transform: translate3d(0,-.5rem,0);
+      transition: $transition/4;
+    }
+  }
+
+
+  .shiver .behavior {
+    animation: shiver $animation-duration infinite;
+
+    .mouth { box-shadow: none; }
+
+    &:hover {
+      animation: shiver-immediate .5s 3;
+    }
+  }
+
+  @keyframes shiver {
+    93% { transform: none; }
+    94%,96%,98% { transform: translate3d(-.125rem,0,0); }
+    95%,97%,99% { transform: translate3d(.125rem,0,0); }
+  }
+
+  @keyframes shiver-immediate {
+    15%, 45% 75% { transform: translate3d(-.125rem,0,0); }
+    30% 60%, 90% { transform: translate3d(.125rem,0,0); }
+  }
+
+
+
+  .snowman:nth-child(3n) .delay { animation-delay: -($animation-duration*.25); }
+  .snowman:nth-child(3n+1) .delay  { animation-delay: -($animation-duration*.75); }
+  .snowman:nth-child(3n+2) .delay { animation-duration: -($animation-duration*.5); }
+
+
+
+/* -------------------------------------------------------------------------------------- */
+/* Fonts ================================================================================ */
+  @font-face {
+    font-family: "icon";
+    src: url('http://bennettfeely.com/fonts/icons.woff');
+  }
+  @font-face {
+    font-family: 'Source Sans Pro';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Source Sans Pro'), local('SourceSansPro-Regular'), url(http://themes.googleusercontent.com/static/fonts/sourcesanspro/v6/ODelI1aHBYDBqgeIAH2zlNHq-FFgoDNV3GTKpHwuvtI.woff) format('woff');
+  }
+  @font-face {
+    font-family: 'Gentium Book Basic';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Gentium Book Basic'), local('GentiumBookBasic'), url(http://themes.googleusercontent.com/static/fonts/gentiumbookbasic/v3/IRFxB2matTxrjZt6a3FUnq6Rv-X66d7QWAwIQQ5u8Sc.woff) format('woff');
+  }
+  @font-face {
+    font-family: 'Gentium Book Basic';
+    font-style: italic;
+    font-weight: 400;
+    src: local('Gentium Book Basic Italic'), local('GentiumBookBasic-Italic'), url(http://themes.googleusercontent.com/static/fonts/gentiumbookbasic/v3/qHqW2lwKO8-uTfIkh8FsUW9ZVGYl7-DCiNGjac5stJT3rGVtsTkPsbDajuO5ueQw.woff) format('woff');
+  }

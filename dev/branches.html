@@ -1,0 +1,99 @@
+<html>
+
+<head>
+	<style>
+		body { background: #ddd; }
+		canvas { background: white; }
+	</style>
+
+<script src="jquery.min.js"></script>
+<script type="text/javascript">
+
+$(function(){
+	var $body = $("body");
+
+	drawBranches();
+
+	function drawBranches(){
+
+
+	var $canvas = $('<canvas class="branches" width="352" height="128"></canvas>');
+	$body.append($canvas);
+
+	if ($canvas[0].getContext){
+		var context = $canvas[0].getContext('2d');
+		var context = drawFractalTree(context);
+	  }
+	  else{
+	    console.log("No support crappy browser");
+	  }
+
+	}
+
+
+	function drawFractalTree(context){
+		drawTree(context, 130, 96, (random(-15,25)+180), 4);
+		drawTree(context, 266, 96, -random(-15,25), 4);
+	}
+
+	function drawTree(context, x1, y1, angle, depth){
+
+		var BRANCH_LENGTH = random(7, 15);
+
+		if (depth != 0){
+			var x2 = x1 + (cos(angle) * depth * BRANCH_LENGTH);
+			var y2 = y1 + (sin(angle) * depth * BRANCH_LENGTH);
+
+			drawLine(context, x1, y1, x2, y2, depth);
+			drawTree(context, x2, y2, angle - random(15,20), depth - 1);
+			drawTree(context, x2, y2, angle + random(15,20), depth - 1);
+		}
+	}
+
+	function drawLine(context, x1, y1, x2, y2, thickness){
+		context.fillStyle   = '#000';
+		context.strokeStyle = 'rgb(139,126, 102)'; //Brown
+
+		context.lineWidth = thickness/2;
+		context.beginPath();
+
+		context.moveTo(x1,y1);
+		context.lineTo(x2, y2);
+
+		context.closePath();
+		context.stroke();
+	}
+
+
+	function cos (angle) {
+		return Math.cos(deg_to_rad(angle));
+	}
+
+	function sin (angle) {
+		return Math.sin(deg_to_rad(angle));
+	}
+
+	function deg_to_rad(angle){
+		return angle*(Math.PI/180.0);
+	}
+
+	function random(min, max){
+		return min + Math.floor(Math.random()*(max+1-min));
+	}
+
+ });
+</script>
+
+<style type="text/css">
+  canvas { border: 1px solid white; }
+</style>
+
+</head>
+
+<body>
+  <!--
+  <canvas id="myCanvas" width="384" height="128"></canvas>
+-->
+</body>
+
+</html>

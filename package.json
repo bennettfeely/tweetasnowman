@@ -1,0 +1,14 @@
+{
+  "name": "snowmanbuilder",
+  "version": "0.1.0",
+  "devDependencies": {
+    "grunt": "~0.4.1",
+    "grunt-contrib-jshint": "~0.6.3",
+    "grunt-contrib-nodeunit": "~0.2.0",
+    "grunt-contrib-uglify": "~0.2.2",
+    "grunt-contrib-watch": "~0.5.3",
+    "grunt-contrib-sass": "~0.8.0",
+    "grunt-autoprefixer": "~0.8.2",
+    "grunt-includes": "~0.3.5"
+  }
+}
